@@ -11,6 +11,7 @@
 		<div class="row">
 			<div class="col">
 				<h1 class="text-center mt-2 mb-2">StackOverflow Latest Questions</h1>
+				<button class="btn btn-info" onclick="getLatestQns()">Get Latest Qns</button>
 				<div id="questions"></div>
 			</div>
 		</div>
@@ -24,20 +25,31 @@
 		let loader = `<h3 class="boxLoading text-center">Loading....</h3>`;
 		questionsEl.innerHTML = loader;
 
-		fetch(`${url}/stack/questions/`)
-		.then(res => res.json())
-		.then(questions => questions.map(question => {
-			// console.log(question.question)
-			
-				htmlData += `<div class="card p-2 flex mt-2">
-								<h4><span style='font-size:66%;'>${question.id}.</span>${question.question}</h4>
-							 </div>
-							 <br>`
-			
-			questionsEl.innerHTML = htmlData
-		}))
-		.catch(err => questionsEl.innerHTML = err)
+		function getLatestQns() {
+			fetch(`${url}/stack/latest`)
+				.then(res => res.json())
+				.then(lquestions => console.log(lquestions))
+				.catch(err => console.log(err))
 
+			displayLatestQns()
+		}
+
+		function displayLatestQns() {
+
+			fetch(`${url}/stack/questions/`)
+			.then(res => res.json())
+			.then(questions => questions.map(question => {
+				// console.log(question.question)
+				
+					htmlData += `<div class="card p-2 flex mt-2">
+									<h4><span style='font-size:66%;'>${question.id}.</span>${question.question}</h4>
+								 </div>
+								 <br>`
+				
+				questionsEl.innerHTML = htmlData
+			}))
+			.catch(err => console.log(err))
+		}
 	</script>
 </body>
 </html>
