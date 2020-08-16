@@ -11,8 +11,12 @@
 		<div class="row">
 			<div class="col">
 				<h1 class="text-center mt-2 mb-2">StackOverflow Latest Questions</h1>
-				<button class="btn btn-info" onclick="getLatestQns()">Get Latest Qns</button>
 				<div id="questions"></div>
+				<center>
+					<button class="btn btn-info" onclick="getLatestQns()">Load Questions</button>
+				</center>
+				<br>
+				<br>
 			</div>
 		</div>
 	</div>
@@ -26,26 +30,33 @@
 		questionsEl.innerHTML = loader;
 
 		function getLatestQns() {
+			displayLatestQns()
+
 			fetch(`${url}/stack/latest`)
 				.then(res => res.json())
 				.then(lquestions => console.log(lquestions))
 				.catch(err => console.log(err))
 
-			displayLatestQns()
 		}
+
+		var sno = 0
 
 		function displayLatestQns() {
 
 			fetch(`${url}/stack/questions/`)
 			.then(res => res.json())
-			.then(questions => questions.map(question => {
-				// console.log(question.question)
-				
+			.then(questions => questions.results.map(question => {
+					sno += 1
 					htmlData += `<div class="card p-2 flex mt-2">
-									<h4><span style='font-size:66%;'>${question.id}.</span>${question.question}</h4>
+									<h4><span style='font-size:86%;'>${sno}. </span>${question.question}</h4>
+									<p><b>Vote Count: </b> ${question.vote_count},
+									<b>Views: </b>${question.views},
+									<b>Tags : </b> ${question.tags},
+									${question.time},
+									<b>Asked By</b> ${question.asked_by}</p>
 								 </div>
 								 <br>`
-				
+								 
 				questionsEl.innerHTML = htmlData
 			}))
 			.catch(err => console.log(err))
